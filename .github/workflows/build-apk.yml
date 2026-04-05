@@ -16,20 +16,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # Capacitor ki demand poori karo
+          node-version: '22'
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21' # 17 se 21 kar diya taaki compile error na aaye
 
       - name: Install and Fix Frontend
         run: |
           cd frontend
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
-          # AJV fix taaki Node 22 par React build na ruke
           npm install ajv --save-dev
 
       - name: Build React app
@@ -54,4 +53,5 @@ jobs:
           name: sam-assistant-debug
           path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
-          
+
+
