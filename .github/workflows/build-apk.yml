@@ -29,11 +29,17 @@ jobs:
       - name: Install frontend deps
         run: |
           cd frontend
+          # Purana kachra saaf karo
+          rm -rf node_modules package-lock.json
+          # Fresh install with legacy peer deps
           npm install --legacy-peer-deps
+          # React-scripts ko explicitly install karo agar missing ho
+          npm install react-scripts@5.0.1 --legacy-peer-deps
 
       - name: Build React app
         run: |
           cd frontend
+          # CI=false lagana zaroori hai taaki warnings build na roke
           CI=false npm run build
 
       - name: Capacitor sync
