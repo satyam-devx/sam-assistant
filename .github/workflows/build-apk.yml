@@ -16,30 +16,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-
+          node-version: '20' # 22 se wapas 20 karte hain stability ke liye
+          
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install frontend deps
+      - name: Install and Fix Frontend
         run: |
           cd frontend
-          # Purana kachra saaf karo
           rm -rf node_modules package-lock.json
-          # Fresh install with legacy peer deps
+          # Force fresh install
           npm install --legacy-peer-deps
-          # React-scripts ko explicitly install karo agar missing ho
-          npm install react-scripts@5.0.1 --legacy-peer-deps
+          # AJV specific fix jo error de raha hai
+          npm install ajv --save-dev
 
       - name: Build React app
         run: |
           cd frontend
-          # CI=false lagana zaroori hai taaki warnings build na roke
           CI=false npm run build
 
       - name: Capacitor sync
@@ -47,12 +43,10 @@ jobs:
           cd frontend
           npx cap sync android
 
-      - name: Make gradlew executable
-        run: chmod +x frontend/android/gradlew
-
       - name: Build Debug APK
         run: |
           cd frontend/android
+          chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK artifact
