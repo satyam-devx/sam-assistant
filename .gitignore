@@ -1,5 +1,15 @@
+# Node & Environment
 node_modules/
 .env
 *.db
-frontend/build/
 .DS_Store
+
+# Frontend Build (React output)
+frontend/build/
+
+# Android - Only ignore temporary build files
+frontend/android/app/build/
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/android/.idea/
+*.keystore
